@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BookTalk AI Prototype</title>
+</head>
+<body style="margin:0">
+<div id="booktalk-app" class="booktalk-app">
+  <style>
+    #booktalk-app{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f6f7fb;color:#171926;min-height:100vh;padding:24px;box-sizing:border-box}
+    #booktalk-app *{box-sizing:border-box}
+    #booktalk-app .shell{max-width:980px;margin:0 auto}
+    #booktalk-app .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
+    #booktalk-app .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:19px}
+    #booktalk-app .brandmark{width:42px;height:42px;border-radius:14px;background:#635bff;color:white;display:grid;place-items:center;font-size:20px}
+    #booktalk-app .step-pill{font-size:13px;font-weight:700;background:#fff;border:1px solid #e2e4ec;padding:8px 12px;border-radius:999px;color:#666b78}
+    #booktalk-app .hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr);gap:24px;align-items:stretch}
+    #booktalk-app .panel{background:#fff;border:1px solid #e4e6ee;border-radius:28px;padding:24px;min-width:0}
+    #booktalk-app h1{font-size:clamp(32px,5vw,54px);line-height:1.01;letter-spacing:-.04em;margin:0 0 14px;max-width:720px}
+    #booktalk-app h2{font-size:23px;letter-spacing:-.025em;margin:0 0 8px}
+    #booktalk-app p{line-height:1.55}
+    #booktalk-app .muted{color:#6c7180}
+    #booktalk-app .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:#635bff;margin-bottom:12px}
+    #booktalk-app .uploadbox{border:2px dashed #cfd2df;border-radius:24px;min-height:340px;padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:#fafaff}
+    #booktalk-app .uploadbox.has-image{padding:0;justify-content:flex-end;background:#111}
+    #booktalk-app .uploadbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.76}
+    #booktalk-app .scan{position:absolute;left:8%;right:8%;height:3px;background:#8c86ff;box-shadow:0 0 20px #8c86ff;top:20%;display:none;animation:scan 1.35s ease-in-out infinite alternate}
+    @keyframes scan{to{top:80%}}
+    #booktalk-app .uploadbox.scanning .scan{display:block}
+    #booktalk-app .upload-content{position:relative;z-index:2}
+    #booktalk-app .uploadbox.has-image .upload-content{width:100%;padding:24px;background:linear-gradient(transparent,rgba(0,0,0,.82));color:white;text-align:left}
+    #booktalk-app .camera-icon{width:68px;height:68px;border-radius:22px;background:#ecebff;color:#635bff;display:grid;place-items:center;font-size:32px;margin:0 auto 14px}
+    #booktalk-app .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    #booktalk-app button,#booktalk-app .filelabel{appearance:none;border:0;border-radius:15px;padding:13px 17px;font-weight:800;font-size:15px;cursor:pointer;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+    #booktalk-app button:focus-visible,#booktalk-app .filelabel:focus-within{outline:3px solid rgba(99,91,255,.35);outline-offset:3px}
+    #booktalk-app .primary{background:#635bff;color:white}
+    #booktalk-app .secondary{background:#f0f1f6;color:inherit;border:1px solid #e0e2e9}
+    #booktalk-app .ghost{background:transparent;color:#635bff;border:1px solid rgba(99,91,255,.3)}
+    #booktalk-app button:disabled{opacity:.45;cursor:not-allowed}
+    #booktalk-app input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
+    #booktalk-app .sample-card{padding:17px;border-radius:20px;background:#f4f3ff;border:1px solid #e0ddff;margin-top:18px}
+    #booktalk-app .sample-book{font-family:Georgia,serif;background:#fffdf5;color:#29251d;border-radius:12px;padding:20px;line-height:1.65;box-shadow:0 10px 35px rgba(35,30,15,.08);transform:rotate(-1deg)}
+    #booktalk-app .sample-book strong{background:#fff0a3}
+    #booktalk-app .progress{display:flex;gap:7px;margin:0 0 26px}
+    #booktalk-app .progress span{height:5px;flex:1;background:#dfe1e8;border-radius:999px}
+    #booktalk-app .progress span.active{background:#635bff}
+    #booktalk-app .screen{display:none}
+    #booktalk-app .screen.active{display:block}
+    #booktalk-app .extract-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px}
+    #booktalk-app .ocr{font-family:Georgia,serif;background:#fbfaf4;border-radius:20px;padding:22px;line-height:1.8;border:1px solid #ebe7d7}
+    #booktalk-app .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+    #booktalk-app .chip{padding:7px 10px;border-radius:999px;background:#f0efff;color:#4d46c8;font-weight:750;font-size:12px}
+    #booktalk-app .transform-card{background:linear-gradient(135deg,#635bff,#8d62ff);color:#fff;border-radius:24px;padding:22px;margin-top:14px}
+    #booktalk-app .dialogue-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:22px}
+    #booktalk-app .conversation{display:flex;flex-direction:column;gap:13px}
+    #booktalk-app .bubble{max-width:88%;padding:16px 18px;border-radius:22px;position:relative;border:1px solid transparent;transition:.2s}
+    #booktalk-app .bubble.a{align-self:flex-start;background:#f0efff;border-bottom-left-radius:7px}
+    #booktalk-app .bubble.b{align-self:flex-end;background:#eef6ff;border-bottom-right-radius:7px}
+    #booktalk-app .bubble.playing{border-color:#635bff;box-shadow:0 0 0 3px rgba(99,91,255,.12)}
+    #booktalk-app .speaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:#635bff;margin-bottom:6px}
+    #booktalk-app .line{font-size:18px;line-height:1.45;font-weight:650}
+    #booktalk-app .bubble-tools{display:flex;gap:8px;margin-top:11px}
+    #booktalk-app .mini{padding:8px 10px;min-height:35px;border-radius:11px;font-size:12px}
+    #booktalk-app .player{position:sticky;top:16px;align-self:start;text-align:center}
+    #booktalk-app .play-orb{width:92px;height:92px;border-radius:50%;background:#635bff;color:#fff;border:0;font-size:32px;margin:8px auto 16px;display:grid;place-items:center}
+    #booktalk-app .speed{display:flex;justify-content:center;gap:7px;margin:12px 0}
+    #booktalk-app .speed button{padding:8px 10px;min-height:36px;border-radius:10px;background:#f0f1f5;color:inherit}
+    #booktalk-app .speed button.selected{background:#635bff;color:#fff}
+    #booktalk-app .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:17px;border-top:1px solid #e6e7ec}
+    #booktalk-app .switch{width:50px;height:30px;border-radius:999px;background:#d9dbe3;padding:3px;cursor:pointer;border:0;min-height:30px}
+    #booktalk-app .switch i{display:block;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
+    #booktalk-app .switch.on{background:#635bff}
+    #booktalk-app .switch.on i{transform:translateX(20px)}
+    #booktalk-app .hidden-lines .line{filter:blur(7px);user-select:none}
+    #booktalk-app .practice-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    #booktalk-app .practice-card{border-radius:26px;padding:26px;background:linear-gradient(145deg,#fff,#f3f1ff);border:1px solid #e5e3f7;min-height:310px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+    #booktalk-app .bigline{font-size:clamp(27px,5vw,45px);line-height:1.18;letter-spacing:-.03em;font-weight:800;margin:16px auto;max-width:750px}
+    #booktalk-app .translation{font-size:15px;color:#727787;max-width:620px;margin:0 auto 18px}
+    #booktalk-app .tip{max-width:720px;margin:20px auto 0;padding:17px;border-radius:18px;background:#fff8d9;text-align:left;border:1px solid #f1df94}
+    #booktalk-app .score-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    #booktalk-app .score{padding:14px;border-radius:17px;background:#f4f5f8}
+    #booktalk-app .score b{display:block;font-size:22px;margin-bottom:4px}
+    #booktalk-app .footer-note{font-size:12px;color:#838895;margin-top:18px}
+    #booktalk-app .status{font-size:13px;font-weight:750;color:#635bff;min-height:20px;margin-top:8px}
+    @media(max-width:760px){#booktalk-app{padding:16px}#booktalk-app .hero,#booktalk-app .extract-grid,#booktalk-app .dialogue-layout{grid-template-columns:1fr}#booktalk-app .player{position:static}#booktalk-app .panel{padding:19px;border-radius:23px}#booktalk-app .topbar{align-items:flex-start}#booktalk-app .bubble{max-width:95%}#booktalk-app .score-strip{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){#booktalk-app .scan{animation:none;top:50%}}
+  </style>
+
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand"><div class="brandmark">↗</div><span>BookTalk AI</span></div>
+      <div class="step-pill" id="stepPill">1 of 4 · Capture</div>
+    </div>
+
+    <div class="progress" aria-hidden="true"><span id="p1" class="active"></span><span id="p2"></span><span id="p3"></span><span id="p4"></span></div>
+
+    <section id="screen1" class="screen active">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">Turn your textbook into speaking practice</div>
+          <h1>Take a photo.<br>Start a conversation.</h1>
+          <p class="muted" style="font-size:18px;max-width:620px">Photograph a paragraph from your English book. AI extracts the language, understands the lesson, then rebuilds it as a natural short dialogue you can listen to and repeat.</p>
+          <div class="sample-card">
+            <div style="font-weight:800;margin-bottom:10px">Try the built-in textbook example</div>
+            <div class="sample-book">Tom missed the train because he <strong>left home too late</strong>. When he arrived at the station, the train had already gone. He called his friend Anna and asked if they could meet later.</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div id="uploadBox" class="uploadbox">
+            <div class="scan"></div>
+            <img id="preview" alt="Uploaded textbook page" hidden>
+            <div class="upload-content">
+              <div id="cameraIcon" class="camera-icon">▣</div>
+              <h2 id="uploadTitle">Add a textbook photo</h2>
+              <p id="uploadHelp" class="muted">Use an image from your device, or load our mock lesson.</p>
+              <div class="actions" style="justify-content:center">
+                <label class="filelabel primary">Choose photo<input id="fileInput" type="file" accept="image/*"></label>
+                <button id="sampleBtn" class="secondary" type="button">Use sample</button>
+              </div>
+              <div id="uploadStatus" class="status"></div>
+            </div>
+          </div>
+          <div class="footer-note">Prototype note: image extraction is simulated locally. The uploaded image never leaves this prototype.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen2" class="screen">
+      <div class="extract-grid">
+        <div class="panel">
+          <div class="eyebrow">AI understood the lesson</div>
+          <h2>From page to practice</h2>
+          <p class="muted">We keep the target language from the curriculum, but turn the textbook situation into spoken English.</p>
+          <div class="ocr">Tom missed the train because he left home too late. When he arrived at the station, the train had already gone. He called his friend Anna and asked if they could meet later.</div>
+          <div class="chips"><span class="chip">Past simple</span><span class="chip">Past perfect</span><span class="chip">Travel</span><span class="chip">Making plans</span></div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Conversation recipe</div>
+          <h2>What AI will create</h2>
+          <p class="muted">A realistic 6-line dialogue using the same vocabulary and grammar, with one useful everyday phrase added for transfer.</p>
+          <div class="transform-card">
+            <div style="font-size:13px;font-weight:800;opacity:.8;margin-bottom:8px">TEXTBOOK</div>
+            <div style="font-size:20px;font-weight:800">“The train had already gone.”</div>
+            <div style="font-size:26px;text-align:center;margin:13px">↓</div>
+            <div style="font-size:13px;font-weight:800;opacity:.8;margin-bottom:8px">NATURAL SPEECH</div>
+            <div style="font-size:20px;font-weight:800">“I got there too late — the train had already left.”</div>
+          </div>
+          <div class="actions"><button id="createDialogueBtn" class="primary" type="button">Create conversation →</button><button id="back1" class="secondary" type="button">Back</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen3" class="screen">
+      <div class="practice-head"><div><div class="eyebrow">Your AI conversation</div><h2>Tom missed the train</h2><p class="muted" style="margin:5px 0 0">Listen once like a mini-podcast. Then practise each role.</p></div><button id="back2" class="secondary" type="button">← Edit source</button></div>
+      <div class="dialogue-layout">
+        <div id="conversation" class="conversation">
+          <div class="bubble a"><div class="speaker">Anna</div><div class="line">Hey Tom, where are you? I thought you were taking the 8:30 train.</div><div class="bubble-tools"><button class="mini secondary replay" type="button">▶ Hear</button><button class="mini ghost practice" type="button">Repeat</button></div></div>
+          <div class="bubble b"><div class="speaker">Tom</div><div class="line">I was, but I left home too late. I missed it.</div><div class="bubble-tools"><button class="mini secondary replay" type="button">▶ Hear</button><button class="mini ghost practice" type="button">Repeat</button></div></div>
+          <div class="bubble a"><div class="speaker">Anna</div><div class="line">Oh no! What happened when you got to the station?</div><div class="bubble-tools"><button class="mini secondary replay" type="button">▶ Hear</button><button class="mini ghost practice" type="button">Repeat</button></div></div>
+          <div class="bubble b"><div class="speaker">Tom</div><div class="line">The train had already left, so I called you straight away.</div><div class="bubble-tools"><button class="mini secondary replay" type="button">▶ Hear</button><button class="mini ghost practice" type="button">Repeat</button></div></div>
+          <div class="bubble a"><div class="speaker">Anna</div><div class="line">No worries. Can you catch the next one?</div><div class="bubble-tools"><button class="mini secondary replay" type="button">▶ Hear</button><button class="mini ghost practice" type="button">Repeat</button></div></div>
+          <div class="bubble b"><div class="speaker">Tom</div><div class="line">Yes. I'll be there at ten. Sorry for the change of plan!</div><div class="bubble-tools"><button class="mini secondary replay" type="button">▶ Hear</button><button class="mini ghost practice" type="button">Repeat</button></div></div>
+        </div>
+        <aside class="panel player">
+          <div class="eyebrow">Listen mode</div>
+          <h2>Hear the whole scene</h2>
+          <p class="muted">Two voices, one continuous conversation.</p>
+          <button id="playAll" class="play-orb" type="button">▶</button>
+          <div id="playerStatus" class="status">Ready to play</div>
+          <div class="speed"><button type="button" data-rate="0.8">0.8×</button><button type="button" data-rate="1" class="selected">1×</button><button type="button" data-rate="1.15">1.15×</button></div>
+          <div class="toggle-row"><div style="text-align:left"><strong>Challenge mode</strong><div class="muted" style="font-size:12px">Blur the text and listen first</div></div><button id="hideText" class="switch" type="button"><i></i></button></div>
+          <div class="actions" style="justify-content:center"><button id="practiceAll" class="primary" type="button">Practise line by line →</button></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="screen4" class="screen">
+      <div class="panel">
+        <div class="practice-head"><div><div class="eyebrow">Shadowing practice</div><h2>Hear it. Copy it. Own it.</h2></div><div class="step-pill" id="lineCounter">Line 1 of 6</div></div>
+        <div class="practice-card">
+          <div id="practiceSpeaker" class="speaker">Anna</div>
+          <div id="practiceLine" class="bigline">Hey Tom, where are you? I thought you were taking the 8:30 train.</div>
+          <div class="translation">Listen to the rhythm first. Then say the line out loud immediately after the model.</div>
+          <div class="actions" style="justify-content:center"><button id="hearLine" class="secondary" type="button">🔊 Hear model</button><button id="didRepeat" class="primary" type="button">✓ I repeated it</button></div>
+          <div id="repeatStatus" class="status"></div>
+          <div class="tip"><strong>💡 Speech tip</strong><br><span id="tipText"></span></div>
+        </div>
+        <div class="score-strip"><div class="score"><b id="repeatScore">0/6</b><span class="muted">Lines repeated</span></div><div class="score"><b>2</b><span class="muted">Grammar patterns</span></div><div class="score"><b>1</b><span class="muted">Everyday phrase</span></div></div>
+        <div class="actions"><button id="prevLine" class="secondary" type="button">← Previous</button><button id="nextLine" class="primary" type="button">Next line →</button><button id="restart" class="ghost" type="button">Start over</button></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (()=> {
+      const root=document.getElementById('booktalk-app');
+      const screens=[1,2,3,4].map(n=>root.querySelector('#screen'+n));
+      const pill=root.querySelector('#stepPill');
+      const labels=['1 of 4 · Capture','2 of 4 · Understand','3 of 4 · Listen','4 of 4 · Repeat'];
+      const bubbles=[...root.querySelectorAll('.bubble')];
+      const lines=bubbles.map(b=>({speaker:b.querySelector('.speaker').textContent,text:b.querySelector('.line').textContent}));
+      let rate=1,playingAll=false,practiceIndex=0;
+      const completed=new Set();
+      const tips=['In natural speech, “Where are you?” often links together smoothly. Don’t pause between every word.','Notice “I was, but…” — short linking words help your English sound conversational, not memorised.','Use past simple for the event: “What happened?”','“Had already left” shows one past action happened before another past moment.','“No worries” is a very common informal way to say “That’s okay.”','“I’ll be there” uses will for a decision or promise about the future.'];
+
+      function stopSpeech(){ if('speechSynthesis' in window) speechSynthesis.cancel(); playingAll=false; bubbles.forEach(b=>b.classList.remove('playing')); root.querySelector('#playAll').textContent='▶'; }
+      function show(n){ screens.forEach((s,i)=>s.classList.toggle('active',i===n-1)); for(let i=1;i<=4;i++)root.querySelector('#p'+i).classList.toggle('active',i<=n); pill.textContent=labels[n-1]; stopSpeech(); window.scrollTo({top:0,behavior:'smooth'}); }
+      function speak(text,index,onend){ if(!('speechSynthesis' in window)){root.querySelector('#playerStatus').textContent='Speech playback is not supported in this browser.'; if(onend)onend(); return;} speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=rate; u.pitch=index%2===0?1.08:.92; u.onend=()=>{bubbles.forEach(b=>b.classList.remove('playing')); if(onend)onend();}; if(index>=0)bubbles[index].classList.add('playing'); speechSynthesis.speak(u); }
+      function playSequence(i=0){ if(!playingAll||i>=lines.length){playingAll=false;root.querySelector('#playAll').textContent='▶';root.querySelector('#playerStatus').textContent='Conversation complete';return;} root.querySelector('#playerStatus').textContent=lines[i].speaker+' is speaking…'; speak(lines[i].text,i,()=>playSequence(i+1)); }
+      function renderPractice(){ const l=lines[practiceIndex]; root.querySelector('#practiceSpeaker').textContent=l.speaker;root.querySelector('#practiceLine').textContent=l.text;root.querySelector('#lineCounter').textContent='Line '+(practiceIndex+1)+' of '+lines.length;root.querySelector('#tipText').textContent=tips[practiceIndex];root.querySelector('#repeatStatus').textContent=completed.has(practiceIndex)?'Repeated ✓':'';root.querySelector('#prevLine').disabled=practiceIndex===0;root.querySelector('#nextLine').textContent=practiceIndex===lines.length-1?'Finish ✓':'Next line →';root.querySelector('#repeatScore').textContent=completed.size+'/'+lines.length; }
+
+      const uploadBox=root.querySelector('#uploadBox'),fileInput=root.querySelector('#fileInput'),preview=root.querySelector('#preview'),status=root.querySelector('#uploadStatus');
+      function beginScan(){uploadBox.classList.add('scanning');status.textContent='AI is reading the page…';setTimeout(()=>{uploadBox.classList.remove('scanning');status.textContent='Text found · lesson context detected';setTimeout(()=>show(2),650)},1400)}
+      root.querySelector('#sampleBtn').addEventListener('click',()=>{uploadBox.classList.add('has-image');root.querySelector('#cameraIcon').style.display='none';root.querySelector('#uploadTitle').textContent='Sample textbook page';root.querySelector('#uploadHelp').textContent='Past events · train travel · making plans';beginScan();});
+      fileInput.addEventListener('change',()=>{const f=fileInput.files&&fileInput.files[0];if(!f)return;if(!f.type.startsWith('image/')){status.textContent='Please choose an image file.';return;}const r=new FileReader();r.onload=()=>{preview.src=r.result;preview.hidden=false;uploadBox.classList.add('has-image');root.querySelector('#cameraIcon').style.display='none';root.querySelector('#uploadTitle').textContent='Textbook photo ready';root.querySelector('#uploadHelp').textContent='For this prototype, AI will use the sample lesson content.';beginScan();};r.readAsDataURL(f);});
+      root.querySelector('#createDialogueBtn').addEventListener('click',()=>show(3));
+      root.querySelector('#back1').addEventListener('click',()=>show(1));
+      root.querySelector('#back2').addEventListener('click',()=>show(2));
+      root.querySelector('#playAll').addEventListener('click',()=>{if(playingAll){stopSpeech();root.querySelector('#playerStatus').textContent='Paused';return;}playingAll=true;root.querySelector('#playAll').textContent='■';playSequence(0);});
+      root.querySelectorAll('.speed button').forEach(btn=>btn.addEventListener('click',()=>{rate=Number(btn.dataset.rate)||1;root.querySelectorAll('.speed button').forEach(b=>b.classList.toggle('selected',b===btn));}));
+      root.querySelectorAll('.replay').forEach((btn,i)=>btn.addEventListener('click',()=>speak(lines[i].text,i)));
+      root.querySelectorAll('.practice').forEach((btn,i)=>btn.addEventListener('click',()=>{practiceIndex=i;renderPractice();show(4);}));
+      const hide=root.querySelector('#hideText');
+      hide.addEventListener('click',()=>{const on=!hide.classList.contains('on');hide.classList.toggle('on',on);root.querySelector('#conversation').classList.toggle('hidden-lines',on);});
+      root.querySelector('#practiceAll').addEventListener('click',()=>{practiceIndex=0;renderPractice();show(4);});
+      root.querySelector('#hearLine').addEventListener('click',()=>speak(lines[practiceIndex].text,practiceIndex));
+      root.querySelector('#didRepeat').addEventListener('click',()=>{completed.add(practiceIndex);root.querySelector('#repeatStatus').textContent='Nice — line completed ✓';root.querySelector('#repeatScore').textContent=completed.size+'/'+lines.length;});
+      root.querySelector('#prevLine').addEventListener('click',()=>{if(practiceIndex>0){practiceIndex--;renderPractice();}});
+      root.querySelector('#nextLine').addEventListener('click',()=>{if(practiceIndex<lines.length-1){practiceIndex++;renderPractice();}else{root.querySelector('#repeatStatus').textContent='Practice complete — you shadowed the whole conversation.';}});
+      root.querySelector('#restart').addEventListener('click',()=>{completed.clear();practiceIndex=0;renderPractice();show(1);preview.hidden=true;preview.removeAttribute('src');uploadBox.classList.remove('has-image','scanning');root.querySelector('#cameraIcon').style.display='grid';root.querySelector('#uploadTitle').textContent='Add a textbook photo';root.querySelector('#uploadHelp').textContent='Use an image from your device, or load our mock lesson.';status.textContent='';fileInput.value='';});
+      renderPractice();
+    })();
+  </script>
+</div>
+</body>
+</html>

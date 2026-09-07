@@ -1,0 +1,686 @@
+body {
+  margin: 0;
+}
+
+#booktalk-app {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f6f7fb;
+  color: #171926;
+  min-height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+#booktalk-app * {
+  box-sizing: border-box;
+}
+
+#booktalk-app .shell {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+#booktalk-app .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+#booktalk-app .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 19px;
+}
+
+#booktalk-app .brandmark {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #635bff;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+#booktalk-app .step-pill {
+  font-size: 13px;
+  font-weight: 700;
+  background: #fff;
+  border: 1px solid #e2e4ec;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #666b78;
+}
+
+#booktalk-app .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+#booktalk-app .panel {
+  background: #fff;
+  border: 1px solid #e4e6ee;
+  border-radius: 28px;
+  padding: 24px;
+  min-width: 0;
+}
+
+#booktalk-app h1 {
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.01;
+  letter-spacing: -0.04em;
+  margin: 0 0 14px;
+  max-width: 720px;
+}
+
+#booktalk-app h2 {
+  font-size: 23px;
+  letter-spacing: -0.025em;
+  margin: 0 0 8px;
+}
+
+#booktalk-app p {
+  line-height: 1.55;
+}
+
+#booktalk-app .muted {
+  color: #6c7180;
+}
+
+#booktalk-app .eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  color: #635bff;
+  margin-bottom: 12px;
+}
+
+#booktalk-app .uploadbox {
+  border: 2px dashed #cfd2df;
+  border-radius: 24px;
+  min-height: 340px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: #fafaff;
+}
+
+#booktalk-app .uploadbox.has-image {
+  padding: 0;
+  justify-content: flex-end;
+  background: #111;
+}
+
+#booktalk-app .uploadbox img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.76;
+}
+
+#booktalk-app .scan {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  background: #8c86ff;
+  box-shadow: 0 0 20px #8c86ff;
+  top: 20%;
+  display: none;
+  animation: scan 1.35s ease-in-out infinite alternate;
+}
+
+@keyframes scan {
+  to {
+    top: 80%;
+  }
+}
+
+#booktalk-app .uploadbox.scanning .scan {
+  display: block;
+}
+
+#booktalk-app .upload-content {
+  position: relative;
+  z-index: 2;
+}
+
+#booktalk-app .uploadbox.has-image .upload-content {
+  width: 100%;
+  padding: 24px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+  color: white;
+  text-align: left;
+}
+
+#booktalk-app .uploadbox.has-image .upload-content .muted {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+#booktalk-app .camera-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 22px;
+  background: #ecebff;
+  color: #635bff;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  margin: 0 auto 14px;
+}
+
+#booktalk-app .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+#booktalk-app button,
+#booktalk-app .filelabel {
+  appearance: none;
+  border: 0;
+  border-radius: 15px;
+  padding: 13px 17px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+#booktalk-app button:focus-visible,
+#booktalk-app .filelabel:focus-within {
+  outline: 3px solid rgba(99, 91, 255, 0.35);
+  outline-offset: 3px;
+}
+
+#booktalk-app .primary {
+  background: #635bff;
+  color: white;
+}
+
+#booktalk-app .secondary {
+  background: #f0f1f6;
+  color: inherit;
+  border: 1px solid #e0e2e9;
+}
+
+#booktalk-app .ghost {
+  background: transparent;
+  color: #635bff;
+  border: 1px solid rgba(99, 91, 255, 0.3);
+}
+
+#booktalk-app button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#booktalk-app input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+#booktalk-app .sample-card {
+  padding: 17px;
+  border-radius: 20px;
+  background: #f4f3ff;
+  border: 1px solid #e0ddff;
+  margin-top: 18px;
+}
+
+#booktalk-app .sample-book {
+  font-family: Georgia, serif;
+  background: #fffdf5;
+  color: #29251d;
+  border-radius: 12px;
+  padding: 20px;
+  line-height: 1.65;
+  box-shadow: 0 10px 35px rgba(35, 30, 15, 0.08);
+  transform: rotate(-1deg);
+}
+
+#booktalk-app .sample-book strong {
+  background: #fff0a3;
+}
+
+#booktalk-app .progress {
+  display: flex;
+  gap: 7px;
+  margin: 0 0 26px;
+}
+
+#booktalk-app .progress span {
+  height: 5px;
+  flex: 1;
+  background: #dfe1e8;
+  border-radius: 999px;
+}
+
+#booktalk-app .progress span.active {
+  background: #635bff;
+}
+
+#booktalk-app .screen {
+  display: none;
+}
+
+#booktalk-app .screen.active {
+  display: block;
+}
+
+#booktalk-app .extract-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 22px;
+}
+
+#booktalk-app .ocr {
+  font-family: Georgia, serif;
+  background: #fbfaf4;
+  border-radius: 20px;
+  padding: 22px;
+  line-height: 1.8;
+  border: 1px solid #ebe7d7;
+}
+
+#booktalk-app .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+#booktalk-app .chip {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #f0efff;
+  color: #4d46c8;
+  font-weight: 750;
+  font-size: 12px;
+}
+
+#booktalk-app .transform-card {
+  background: linear-gradient(135deg, #635bff, #8d62ff);
+  color: #fff;
+  border-radius: 24px;
+  padding: 22px;
+  margin-top: 14px;
+}
+
+#booktalk-app .dialogue-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 22px;
+}
+
+#booktalk-app .conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+#booktalk-app .bubble {
+  max-width: 88%;
+  padding: 16px 18px;
+  border-radius: 22px;
+  position: relative;
+  border: 1px solid transparent;
+  transition: 0.2s;
+}
+
+#booktalk-app .bubble.a {
+  align-self: flex-start;
+  background: #f0efff;
+  border-bottom-left-radius: 7px;
+}
+
+#booktalk-app .bubble.b {
+  align-self: flex-end;
+  background: #eef6ff;
+  border-bottom-right-radius: 7px;
+}
+
+#booktalk-app .bubble.playing {
+  border-color: #635bff;
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.12);
+}
+
+#booktalk-app .speaker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 850;
+  color: #635bff;
+  margin-bottom: 6px;
+}
+
+#booktalk-app .line {
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+#booktalk-app .bubble-tools {
+  display: flex;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+#booktalk-app .mini {
+  padding: 8px 10px;
+  min-height: 35px;
+  border-radius: 11px;
+  font-size: 12px;
+}
+
+#booktalk-app .player {
+  position: sticky;
+  top: 16px;
+  align-self: start;
+  text-align: center;
+}
+
+#booktalk-app .play-orb {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: #635bff;
+  color: #fff;
+  border: 0;
+  font-size: 32px;
+  margin: 8px auto 16px;
+  display: grid;
+  place-items: center;
+}
+
+#booktalk-app .speed {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+#booktalk-app .speed button {
+  padding: 8px 10px;
+  min-height: 36px;
+  border-radius: 10px;
+  background: #f0f1f5;
+  color: inherit;
+}
+
+#booktalk-app .speed button.selected {
+  background: #635bff;
+  color: #fff;
+}
+
+#booktalk-app .toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 17px;
+  border-top: 1px solid #e6e7ec;
+}
+
+#booktalk-app .switch {
+  width: 50px;
+  height: 30px;
+  border-radius: 999px;
+  background: #d9dbe3;
+  padding: 3px;
+  cursor: pointer;
+  border: 0;
+  min-height: 30px;
+}
+
+#booktalk-app .switch i {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  transition: 0.2s;
+}
+
+#booktalk-app .switch.on {
+  background: #635bff;
+}
+
+#booktalk-app .switch.on i {
+  transform: translateX(20px);
+}
+
+#booktalk-app .hidden-lines .line {
+  filter: blur(7px);
+  user-select: none;
+}
+
+#booktalk-app .practice-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+#booktalk-app .practice-card {
+  border-radius: 26px;
+  padding: 26px;
+  background: linear-gradient(145deg, #fff, #f3f1ff);
+  border: 1px solid #e5e3f7;
+  min-height: 310px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+#booktalk-app .bigline {
+  font-size: clamp(27px, 5vw, 45px);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  margin: 16px auto;
+  max-width: 750px;
+}
+
+#booktalk-app .translation {
+  font-size: 15px;
+  color: #727787;
+  max-width: 620px;
+  margin: 0 auto 18px;
+}
+
+#booktalk-app .tip {
+  max-width: 720px;
+  margin: 20px auto 0;
+  padding: 17px;
+  border-radius: 18px;
+  background: #fff8d9;
+  text-align: left;
+  border: 1px solid #f1df94;
+}
+
+#booktalk-app .score-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+#booktalk-app .score {
+  padding: 14px;
+  border-radius: 17px;
+  background: #f4f5f8;
+}
+
+#booktalk-app .score b {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+#booktalk-app .footer-note {
+  font-size: 12px;
+  color: #838895;
+  margin-top: 18px;
+}
+
+#booktalk-app .status {
+  font-size: 13px;
+  font-weight: 750;
+  color: #635bff;
+  min-height: 20px;
+  margin-top: 8px;
+}
+
+#booktalk-app .error-text {
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+#booktalk-app .role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+#booktalk-app .role-card {
+  padding: 20px;
+  border-radius: 20px;
+  border: 2px solid #e4e6ee;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s;
+}
+
+#booktalk-app .role-card:hover {
+  border-color: #635bff;
+}
+
+#booktalk-app .role-card.selected {
+  border-color: #635bff;
+  background: #f0efff;
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.12);
+}
+
+#booktalk-app .role-card b {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+#booktalk-app .mic-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #635bff;
+  color: white;
+  border: 0;
+  font-size: 28px;
+  margin: 16px auto;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+#booktalk-app .mic-btn.recording {
+  background: #e74c3c;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+#booktalk-app .turn-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #f0efff;
+  color: #635bff;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+#booktalk-app .completion-card {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#booktalk-app .completion-card h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 760px) {
+  #booktalk-app {
+    padding: 16px;
+  }
+
+  #booktalk-app .hero,
+  #booktalk-app .extract-grid,
+  #booktalk-app .dialogue-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #booktalk-app .player {
+    position: static;
+  }
+
+  #booktalk-app .panel {
+    padding: 19px;
+    border-radius: 23px;
+  }
+
+  #booktalk-app .topbar {
+    align-items: flex-start;
+  }
+
+  #booktalk-app .bubble {
+    max-width: 95%;
+  }
+
+  #booktalk-app .score-strip,
+  #booktalk-app .role-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #booktalk-app .scan {
+    animation: none;
+    top: 50%;
+  }
+}
